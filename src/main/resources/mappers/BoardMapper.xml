@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mnu.sample.mapper.BoardMapper">
+	<!-- 1. 전체 글 수 카운트 get -->
+	<select id="boardCount" resultType="int">
+		select count(*) from tbl_board
+	</select>
+	
+	<!-- 2. 검색조건에 해당하는 글 수 post -->
+	<select id="boardCountSearch" resultType="int">
+		select count(*) from tbl_board where
+			<choose>
+				<when test="search=='name'">
+					name like '%'||#{key}||'%'
+				</when>
+				<when test="search=='subject'">
+					subject like '%'||#{key}||'%'
+				</when>
+				<when test="search=='contents'">
+					contents like '%'||#{key}||'%'
+				</when>
+			</choose>
+	</select>
+	
+	<!-- 2. 검색조건에 해당하는 글 수 get, post -->
+<!--  	
+	<select id="boardCount" resultType="int">
+		select count(*) from tbl_board
+			<choose>
+				<when test="search=='name'">
+					where name like '%'||#{key}||'%'
+				</when>
+				<when test="search=='subject'">
+					where subject like '%'||#{key}||'%'
+				</when>
+				<when test="search=='contents'">
+					where contents like '%'||#{key}||'%'
+				</when>
+			</choose>
+	</select>
+ -->	
+	<!-- 2. 검색조건에 해당하는 글 수 MySQL(MariDB) -->
+<!-- 	 
+	 <select id="boardCountSearch1" resultType="int">
+		select count(*) from tbl_board where 
+			<choose>
+				<when test="search=='name'">
+					name like concat('%',#{key},'%')
+				</when>
+				<when test="search=='subject'">
+					subject like concat('%',#{key},'%')
+				</when>
+				<when test="search=='contents'">
+					contents like concat('%',#{key},'%')
+				</when>
+			</choose>
+	</select> 
+ -->	
+ 
+	<!-- 3. 전체목록 리스트 get -->
+	<select id="boardList" resultType="com.mnu.sample.domain.BoardDTO">
+		select * from tbl_board order by idx desc
+	</select>
+	
+	<!-- 4. 검색조건에 해당하는 글 리스트 post -->
+	<select id="boardListSearch" resultType="com.mnu.sample.domain.BoardDTO">
+		select * from tbl_board where 
+			<choose>
+				<when test="search=='name'">
+					name like '%'||#{key}||'%'
+				</when>
+				<when test="search=='subject'">
+					subject like '%'||#{key}||'%'
+				</when>
+				<when test="search=='contents'">
+					contents like '%'||#{key}||'%'
+				</when>
+			</choose>
+		order by idx desc
+	</select>
+	
+	<!-- 5. 글 등록 -->
+	
+	<!-- 6. 특정 글 검색(view, 수정) -->
+	
+	<!-- 7. 수정처리 -->
+	
+	<!-- 8. 삭제처리 -->
+
+</mapper>
