@@ -33,7 +33,7 @@ A:hover {font-family:tahoma;font-size:9pt;color:#009900;text-decoration:underlin
 					<td><table width="100%" border="0" cellpadding="6" cellspacing="1" bgcolor="DDDDDD">
 							<tr>
 								<td width="25%" align="center" bgcolor="EcECEC"><strong>회원성명</strong></td>
-								<td width="25%"bgcolor="ffffff">홍길동</td>
+								<td width="25%" bgcolor="ffffff">홍길동</td>
 								<td width="25%" align="center" bgcolor="EcECEC"><strong>아이디</strong></td>
 								<td align="center" bgcolor="ffffff">user01</td>
 							</tr>

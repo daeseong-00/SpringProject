@@ -20,6 +20,13 @@ public class AdminController {
 		
 		return "Admin/admin_login";
 	}
+	//관리자 목록
+	@GetMapping("admin_list")
+	public String adminList() {
+		log.info("Admin Call : admin_list");
+		
+		return "Admin/admin_list";
+	}
 	//로그아웃 처리
 	@GetMapping("logout")
 	public String AdminLogout() {

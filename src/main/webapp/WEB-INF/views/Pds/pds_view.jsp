@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ include file="../Include/topmenu.jsp" %>
 
@@ -11,6 +12,14 @@
      td.content { padding:10px; line-height:1.6em; text-align:justify; }
      a.list { text-decoration:none;color:black;font-size:10pt; }
    </style>
+   
+ <script>
+   	function pds_del(){
+   		url = "/Pds/pds_delete?idx="+${pds.idx}+"&page="+${page};
+   		window.open(url,"자료실 삭제","width=300, height=200");
+   	}
+
+   </script>  
  </head>
 
    <!--DB에서 검색한 자료를 화면에 출력  -->
@@ -37,23 +46,29 @@
        <tr bgcolor="e3e9ff">
          <td class="title">
            <img src="/Images/img/bullet-04.gif">   
-           <font size="2" face="돋움">좋은 하루 되세요
+           <font size="2" face="돋움">${pds.subject}
            </font></td></tr>
-  <tr>  
-    <td class="content">
-    <p align="right"><font size="2" face="돋움">  
-			홍길동 / 2007-10-11 / 2번 읽음
-    <p>언제나 즐겁고 행복한 하루가 되었으면 합니다.<br>
-		    항상 노력하는 자 만이 성공할 수 있다.<p>
-    <img src="/Images/img/disk.gif" align="middle" width="22" height="20" border="0">&nbsp;test.zip
-	
-	</font></td></tr>
+		<tr>  
+			<td class="content">
+				<p align="right"><font size="2" face="돋움"> ${pds.name} / ${pds.regdate} / ${pds.readcnt}번 읽음
+				<p>${pds.contents}</p>
+			<c:if test="${!empty pds.filename}">	
+				<img src="/Images/img/disk.gif" align="middle" width="22" height="20" border="0">
+				&nbsp;<a class="list" href="/Pds/down_load?filename=${pds.filename}">${pds.filename}</a>
+	        </c:if>
+				</font>
+			</td>
+		</tr>
   </table>
   <p align="center">
   <font size="2">
-  <img src="/Images/img/edit-1.gif" border="0">&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="/Images/img/del.gif" border="0">&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="/Images/img/list-2.gif" border="0"></font></td></tr>  
+   	<!-- 수정 -->
+	<a href="/Pds/pds_modify?idx=${pds.idx}&page=${page}"><img src="/Images/img/edit-1.gif" border="0"></a> &nbsp;&nbsp;&nbsp;&nbsp;
+	<!-- 삭제 -->
+	<a href="javascript:pds_del()"><img src="/Images/img/del.gif" border="0"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<!-- 목록 -->
+	<a href="/Pds/pds_list?page=${page}"><img src="/Images/img/list-2.gif" border="0"></a>
+
 </table>  
 </body>  
 </html>

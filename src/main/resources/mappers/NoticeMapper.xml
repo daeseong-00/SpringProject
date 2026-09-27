@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mnu.sample.mapper.NoticeMapper">
+	<!-- 1. 전체 공지사항 카운트  -->
+	<select id="noticeCount" resultType="int">
+		select count(*) from tbl_notice
+	</select>
+	
+	<!-- 2. 검색조건에 맞는 공지사항 카운트  -->
+	<select id="noticeSearchCount" resultType="int">
+		select count(*) from tbl_notice where
+			<choose>
+				<when test="search=='subject'">
+					subject like '%'||#{key}||'%'
+				</when>
+				<when test="search=='contents'">
+					contents like '%'||#{key}||'%'
+				</when>
+			</choose>
+	</select>
+
+	<!-- 3. 공지사항 목록(검색+페이지) 겸용  -->
+	<select id="noticeList" resultType="com.mnu.sample.domain.NoticeDTO">
+		select * from tbl_notice 
+			<choose>
+				<when test="search=='subject'">
+					where subject like '%'||#{key}||'%'
+				</when>
+				<when test="search=='contents'">
+					where contents like '%'||#{key}||'%'
+				</when>
+			</choose>
+		order by idx desc 
+		offset #{offset} rows fetch next #{maxlist} rows only
+	</select>
+	
+	<!-- 4. idx에 해당하는 글 목록(View, modify)  -->
+	<select id="noticeSelect" resultType="com.mnu.sample.domain.NoticeDTO">
+		select * from tbl_notice where idx = #{idx}
+	</select>
+	
+	<!-- 5. 공지사항 등록(write) 처리  -->
+	<insert id="noticeWrite">
+		insert into tbl_notice(idx,adid,subject,contents) 
+			values(tbl_notice_seq_idx.nextval,#{adid},#{subject},#{contents})
+	</insert>
+	
+	<!-- 6. 공지사항 수정 처리  -->
+	<update id="noticeModify">
+		update tbl_notice set subject=#{subject}, contents=#{contents} 
+		where idx=#{idx}
+	</update>
+	
+	<!-- 7. 공지사항 삭제  -->
+	<delete id="noticeDelete">
+		delete from tbl_notice where idx=#{idx}
+	</delete>
+
+</mapper>

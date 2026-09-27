@@ -10,7 +10,12 @@
      td.content { padding:10px; line-height:1.6em; text-align:justify; }
      a.list { text-decoration:none;color:black;font-size:10pt; }
    </style>
-
+<script>
+	function board_delete(){
+		var url="/Board/board_delete?idx=${board.idx}&page=${page}";
+		window.open(url,"board_delete","width=350, height=250");
+	}
+</script>
  </head>
  <body topmargin="0" leftmargin="0">
    <table border="0" width="800">
@@ -32,15 +37,15 @@
          <tr bgcolor="e3e9ff">
            <td class="title">
              <img src="/Images/img/bullet-04.gif"> <font size="2" face="돋움">
-                  제목부분</font>
+                  ${board.subject}</font>
            </td>
          </tr>
          <tr>
            <td class="content">
              <p align="right"><font size="2" face="돋움">
-              <a class="list" href="mailto:ein1027@nate.com">나종민</a> / <font size="2" face="돋움">2007-1022 / 2번 읽음</font>
-             <p>
-             내용이 들어가는 부분<p><!--contents의 내용을 <BR>태그로 처리-->
+              <a class="list" href="mailto:ein1027@nate.com">${board.name}</a> / 
+              	<font size="2" face="돋움">${board.regdate} / ${board.readcnt}번 읽음</font>
+             <p>${board.contents}<p><!--contents의 내용을 <BR>태그로 처리-->
            </td>
          </tr>
        </table>
@@ -49,18 +54,18 @@
       <p align="center">
       <font size="2">
        <!-- 새글쓰기 -->
-       <a href="">
+       <a href="/Board/board_write?page=${page}">
        <img src="/Images/img/write.jpg" border="0"></a>&nbsp;&nbsp;
 	   <!-- 답글쓰기 -->
        <a href="">
-       <img src="/Images/reply.gif" border="0"></a>&nbsp;&nbsp;
+       <img src="/Images/img/reply.gif" border="0"></a>&nbsp;&nbsp;
 	   <!-- 수정하기 -->
-       <a href="">
+       <a href="/Board/board_modify?idx=${board.idx}&page=${page}">
        <img src="/Images/img/edit.gif" border="0"></a>&nbsp;&nbsp;
          <!-- 삭제하기 -->
-       <a href=""><img src="/Images/img/del.gif" border="0"></a>&nbsp;&nbsp;
+       <a href="javascript:board_delete();"><img src="/Images/img/del.gif" border="0"></a>&nbsp;&nbsp;
        <!-- 목록보기 -->
-       <a href=""><img src="/Images/img/list-2.gif" border="0"></a>&nbsp;&nbsp;
+       <a href="/Board/board_list?page=${page}"><img src="/Images/img/list-2.gif" border="0"></a>&nbsp;&nbsp;
       </font>
     </td>
   </tr>
