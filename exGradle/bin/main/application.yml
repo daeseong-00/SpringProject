@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: exMaven
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+server:
+  port: 8080

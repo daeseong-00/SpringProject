@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mnu.mybatis.mapper.EmpMapper">
+
+	<select id="empCount" resultType="int">
+		select count(*) from emp
+	</select>
+	
+	<select id="empDnoCount" resultType="int">
+		select count(*) from emp where dno=#{dno}
+	</select>
+	
+	<select id="empList" resultType="com.mnu.mybatis.domain.EmpDTO">
+		select * from emp order by eno desc
+	</select>
+	
+	<select id="empDnoList" resultType="com.mnu.mybatis.domain.EmpDTO">
+		select * from emp where dno=#{dno} order by eno desc
+	</select>
+	
+	<select id="empEnoList" resultType="com.mnu.mybatis.domain.EmpDTO">
+		select * from emp where eno=#{eno}
+	</select>
+	
+	<insert id="deptWrite">
+		insert into dept(dno,dname,loc) values(#{dno},#{dname},#{loc})
+	</insert>
+	
+	<update id="deptUpdate">
+		update dept set dname=#{dname}, loc=#{loc}, where dno=#{dno}
+	</update>
+	
+	<delete id="deptDelete">
+		delete from dept where dno=#{dno}
+	</delete>
+</mapper>
+
