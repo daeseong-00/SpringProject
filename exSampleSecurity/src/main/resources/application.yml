@@ -1,0 +1,12 @@
+#spring.application.name=exSampleSecurity
+#DB config(oracle)
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: oracle:thin:@localhost:1521/xe
+    username: C##sample
+    password: 1234
+
+#mapper
+mybatis:
+  mapper-locations: "classpath:/mappers/**/*.xml"

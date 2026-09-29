@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mnu.sample.mapper.PdsMapper">
+	<!-- 최근 글 n개 리스트 -->
+	<select id="pdsTopList" resultType="com.mnu.sample.domain.PdsDTO">
+		select * from
+			(select * from tbl_pds order by idx desc)
+				<![CDATA[
+				where rownum <= #{num}
+				]]>
+				<!-- where orwnum &lt;= #{num} -->
+	</select>
+	
+		<!-- oracle12c 이상 최근 글 n개 리스트 -->
+	<select id="pdsTopList2" resultType="com.mnu.sample.domain.PdsDTO">
+		select * from tbl_pds
+			order by idx desc
+				fetch first #{num} rows only
+	</select>
+	<!-- 1. 전체 글수 카운트 get -->
+	<select id="pdsCount" resultType="int">
+	     select count(*) from tbl_pds
+	</select>
+	
+	<!-- 2. 검색조건에 해당하는 글수 post -->
+	<select id="pdsCountSearch" resultType="int">
+	     select count(*) from tbl_pds where 
+	     	<choose>
+	     		<when test="search=='name'">
+	     			name like '%'||#{key}||'%'
+	     		</when>
+	     		<when test="search=='subject'">
+	     			subject like '%'||#{key}||'%'
+	     		</when>
+	     		<when test="search=='contents'">
+	     			contents like '%'||#{key}||'%'
+	     		</when>
+	     	</choose>
+	</select>
+
+ 	<!-- 4-1. 검색조건 + 페이지 인덱싱 리스트 -->
+ 	<select id="pdsList" resultType="com.mnu.sample.domain.PdsDTO">
+ 	      select * from tbl_pds  
+ 	      	     	<choose>
+	     		        <when test="search=='name'">
+	     			        where name like '%'||#{key}||'%'
+	     		        </when>
+	     		        <when test="search=='subject'">
+	     			        where subject like '%'||#{key}||'%'
+	     		        </when>
+	     		        <when test="search=='contents'">
+	     			        where contents like '%'||#{key}||'%'
+	     		        </when>
+	     	       </choose>
+ 	       	             order by idx desc 
+ 	                           offset #{offset} rows fetch next #{maxlist} rows only 	
+ 	</select>
+ 	
+	<!-- 5. 글 등록 -->
+	<insert id="pdsWrite">
+		insert into tbl_pds(idx, name, email,subject, contents, pass, filename)
+		       values(tbl_pds_seq_idx.nextval,#{name},#{email},#{subject},
+		                                      #{contents},#{pass}, #{filename})
+	</insert>
+	<!-- 6. 특정글 검색(view, 수정) -->
+	<update id="pdsHits">
+		update tbl_pds set readcnt = readcnt + 1 where idx = #{idx}
+	</update>
+	<select id="pdsView" resultType="com.mnu.sample.domain.PdsDTO">
+		select * from tbl_pds where idx = #{idx}
+	</select>
+	
+	<!-- 7. 수정처리 -->
+	<update id="pdsModifyPro">
+		update tbl_pds set email=#{email}, subject=#{subject}, contents=#{contents} 
+					,filename=#{filename} where idx=#{idx} and pass=#{pass}
+	</update>
+	<!-- 8. 삭제처리 -->
+	<delete id="pdsDelete">
+		delete from tbl_pds where idx=#{idx} and pass=#{pass}
+	</delete>
+	<!-- 첨부파일 검색 -->
+	<select id="pdsSearchFile" resultType="string">
+		select filename from tbl_pds where idx = #{idx}
+	</select>
+
+</mapper>
