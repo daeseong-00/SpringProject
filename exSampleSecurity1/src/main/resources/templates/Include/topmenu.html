@@ -16,7 +16,7 @@
  <table width=800>
    <tr>
      <td width="20%" rowspan="4" valign="bottom" bgcolor="#000000">
-       <a href="/index.jsp"><img src="/Images/img/jsl_logo1.png" width="168" height="80" border="0"></a>
+       <a href=""><img src="/Images/img/jsl_logo1.png" width="168" height="80" border="0"></a>
        <font style="font-size:9pt;color:white;font-family:돋움"><b>Total 136,489
        <font color="yellow"></font>
        | Now 178
@@ -42,19 +42,19 @@
      </p>
      </td>
      <td  width="10%" onmouseover="style.backgroundColor='#2772D3'" onmouseout="style.backgroundColor=''">
-     <p align="center"><font color="white" size="2"><b><a href="/Notice/notice_list.jsp" class="white">공지사항</a></b></font></p>
+     <p align="center"><font color="white" size="2"><b><a href="/Notice/notice_list" class="white">공지사항</a></b></font></p>
      </td>
      <td  width="10%" onmouseover="style.backgroundColor='#2772D3'" onmouseout="style.backgroundColor=''">
-     <p align="center"><font color="white" size="2"><b><a href="/Board/board_list.jsp" class="white">자유게시판</a></b></font></p>
+     <p align="center"><font color="white" size="2"><b><a href="/Board/board_list" class="white">자유게시판</a></b></font></p>
      </td>
      <td  width="10%" onmouseover="style.backgroundColor='#2772D3'" onmouseout="style.backgroundColor=''">
-     <p align="center"><font color="white" size="2"><b><a href="/BoardPhoto/board_list.jsp" class="white">포토게시판</a></b></font></p>
+     <p align="center"><font color="white" size="2"><b><a href="/BoardPhoto/board_list" class="white">포토게시판</a></b></font></p>
      </td>
      <td  width="10%" onmouseover="style.backgroundColor='#2772D3'" onmouseout="style.backgroundColor=''">
-     <p align="center"><font color="white" size="2"><b><a href="/Pds/pds_list.jsp" class="white">자료실</a></b></font></p>
+     <p align="center"><font color="white" size="2"><b><a href="/Pds/pds_list" class="white">자료실</a></b></font></p>
      </td>
      <td  width="10%" onmouseover="style.backgroundColor='#2772D3'" onmouseout="style.backgroundColor=''">
-     <p align="center"><font color="white" size="2"><b><a href="/Gallery/gallery_list.jsp" class="white">겔러리</a></b></font></p>
+     <p align="center"><font color="white" size="2"><b><a href="/Gallery/gallery_list" class="white">겔러리</a></b></font></p>
      </td>
      
      <td  width="10%" onmouseover="style.backgroundColor='#2772D3'" onmouseout="style.backgroundColor=''">
@@ -64,16 +64,11 @@
      	<font color="#2772D3" size="2"><b sec:authentication="Principal.username"></b> 님</font>
      </p>
      <p sec:authorize="hasRole('ADMIN')" align="center">
-     	<font color="white" size="2"><b><a href="/Admin/Notice/notice_list?page=1" class="white">관리자</a></b></font>
+     	<font color="white" size="2"><b><a href="/Admin/notice_list" class="white">관리자</a></b></font>
      </p>
      </td>
    
    </tr>                   
-   <tr>
-     <td colspan="8">
-     <p><img src="/Images/img/bar-01.gif" width="100%" height="1" border="0"></p>
-     </td>
-   </tr>
    <tr>
      <td colspan="8"><p><img src="/Images/img/bar-01.gif" width="100%" height="1" border="0"></p></td>
    </tr>

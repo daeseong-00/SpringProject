@@ -1,5 +1,6 @@
-<!-- topmenu include -->
+<!-- 메뉴 include -->
 <th:block th:replace="~{Include/topmenu}"></th:block>
+
 <html>
 <head>
 <title>회원등록</title>
@@ -35,12 +36,12 @@ $(function(){
 	
 	// 등록 버튼 클릭시
 	$("#userSend").click(function(){
-		//유효성검사
-		
+		//유효성 검사
 		
 		alert("정보를 등록합니다");
 		$("#user").submit();
 	});
+	
 
 
 	//핸드폰 인증하기 버튼 클릭시
@@ -77,20 +78,22 @@ $(function(){
 <body bgcolor="#FFFFFF" LEFTMARGIN=0  TOPMARGIN=0 >
  
 
-
 <table border="0" width="800">
 <tr>
   <td width="20%"  bgcolor="#ecf1ef" valign="top" style="padding-left:0;">
 	
 	<!--로그인 영역 삽입-->
 	<th:block th:replace="~{Include/login_form}"></th:block>
+	
   </td>
   <td width="80%" valign="top">&nbsp;<img src="/Images/img/title1.gif" ><br>    
-	<!--  
+<!-- 	
 	<form name="user" method=post action="/Join/user_insert">
 	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-	 -->
-	 <form name="user" id="user" method=post th:action="@{/Join/user_insert}">
+ -->
+ 	<form name="user" id="user" method=post th:action="@{/Join/user_insert}">
+ 	<input type="hidden" id="email" name="email"><!-- @로 결합된 이메일 전송용  -->
+ 	
 	<table border=0 cellpadding=0 cellspacing=0 width=730 valign=top>
 		<tr><td align=center><br>                            
 			<table cellpadding=0 cellspacing=0 border=0 width=650 align=center>       
@@ -140,8 +143,8 @@ $(function(){
 							</tr>
 							<tr>
 								<TD BGCOLOR="#EFF4F8">&nbsp;인증 방법 선택<font color=red>&nbsp;*</font></td>
-								<TD BGCOLOR=WHITE><input type=radio id="mode1" name=mode value="핸드폰" checked>핸드폰
-									<input type=radio id="mode2" name="mode" value="이메일" >이메일
+								<TD BGCOLOR=WHITE><input type=radio id="mode1" name=gubun value="1" checked>핸드폰
+									<input type=radio id="mode2" name="gubun" value="2" >이메일
 								</td>
 							</tr>
 							<tr id="phone">
@@ -204,7 +207,7 @@ $(function(){
 							<tr bgcolor=#ffffff>
 								<td colspan=3 align=center>
 									<img src="/Images/img/u_bt06.gif" vspace=3 border=0 name=img3 id="userSend">
-									<img src="/Images/img/u_bt05.gif" border=0 hspace=10 vspace=3 name=img4 id="userCancel">
+									<img src="/Images/img/u_bt05.gif" border=0 hspace=10 vspace=3 name=img4 id="userCancle">
 								</td>
 							</tr>
 						</table> 
