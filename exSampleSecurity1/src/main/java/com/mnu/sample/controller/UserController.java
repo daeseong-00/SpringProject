@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.mnu.sample.domain.UserDTO;
 import com.mnu.sample.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -55,8 +57,6 @@ public class UserController {
 	//인증
 	
 	
-	//회원 가입처리(DB 저장)
-	
 	//MyPage
 	@GetMapping("/User/user_mypage")
 	public String userMyPage() {
@@ -64,5 +64,16 @@ public class UserController {
 		return "/User/user_mypage";
 	}
 
-	
+	//로그아웃
+	@GetMapping("/Join/user_logout")
+	public String userLogout(HttpServletRequest request) {
+		log.info("User Call : user_logout");
+		HttpSession session = request.getSession();
+		if(session != null) {
+			session.invalidate();
+		}
+		return "/Join/user_logout";
+		//return "redirect:/";
+	}
 }
+

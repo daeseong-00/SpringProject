@@ -13,17 +13,15 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/User/**").hasAnyRole("USER")
-				.requestMatchers("/Manager/**").hasAnyRole("MANAGER","ADMIN")
-				.requestMatchers("/Admin/**").hasAnyRole("ADMIN")
+				.requestMatchers("/User/**", "/Manager/**", "/Admin/**").permitAll() // 임시로 모두 허용
 				.anyRequest().permitAll()	
 		)
 		.formLogin(login ->login
 				.loginPage("/Join/user_login")
-				.loginProcessingUrl("/")
+				.loginProcessingUrl("/Join/user_login")
 				.usernameParameter("userid")
 				.passwordParameter("passwd")
-				.failureUrl("/Join/login_error")
+				.failureUrl("/Join/user_error")
 				
 		);
 		
