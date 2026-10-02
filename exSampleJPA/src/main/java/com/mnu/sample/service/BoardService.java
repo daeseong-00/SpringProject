@@ -25,6 +25,11 @@ public class BoardService {
 		return boardRepository.save(board.toEntity()).getIdx();
 		//등록 후 등록된 idx 반환
 	}
+	//카운트 (전체 게시글 수)
+	@Transactional
+	public long boardCount() {
+		return boardRepository.count();
+	}
 	//전체목록
 	@Transactional
 	public List<BoardResponseDTO> boardList(){
@@ -37,4 +42,20 @@ public class BoardService {
 		//-> List로 반환하는 메서드
 	}
 	
+	//상세보기(view)
+	@Transactional
+	public BoardResponseDTO boardView(int idx) {
+		BoardEntity boardEntity = boardRepository.findById(idx)
+				.orElseThrow(()->new IllegalArgumentException("idx 없음"));
+		
+		BoardResponseDTO board = new BoardResponseDTO(boardEntity);
+		return board;
+		
+	}
+	
+	//삭제
+	@Transactional
+	public int boardDelete(int idx, String pass) {
+		return boardRepository.boardDelete(idx, pass);
+	}
 }

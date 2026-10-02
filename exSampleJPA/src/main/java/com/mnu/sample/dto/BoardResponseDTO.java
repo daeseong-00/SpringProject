@@ -14,7 +14,7 @@ public class BoardResponseDTO {
 	private String pass;
 	private String subject;
 	private String contents;
-	private String readcnt;
+	private int readcnt;
 	private LocalDateTime regdate;
 	private LocalDateTime updatedate;
 	

@@ -28,7 +28,7 @@ public class BoardEntity {
 	private String pass;
 	private String subject;
 	private String contents;
-	private String readcnt;
+	private int readcnt;
 	private LocalDateTime regdate = LocalDateTime.now();
 	private LocalDateTime updatedate;
 	
