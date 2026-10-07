@@ -59,7 +59,7 @@
        <a th:onclick="board_delete3()"><img src="/Images/img/del.gif" border="0"></a>&nbsp;&nbsp;
        <a th:onclick="|board_delete4('${board.idx}', '1')|"><img src="/Images/img/del.gif" border="0"></a>&nbsp;&nbsp;
        <!-- 목록보기 -->
-       <a th:href="@{/Board/board_list(page=1)}"><img src="/Images/img/list-2.gif" border="0"></a>&nbsp;&nbsp;
+       <a th:href="@{/Board/board_list(page=${page-1})}"><img src="/Images/img/list-2.gif" border="0"></a>&nbsp;&nbsp;
       </font>
     </td>
   </tr>

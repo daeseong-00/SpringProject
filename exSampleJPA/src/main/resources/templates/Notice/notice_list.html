@@ -21,21 +21,19 @@
 <table border="0" width="800">
   <tr>
     <td width="20%" height="500" valign="top" bgcolor="#ecf1ef">
-
-	<!-- 다음에 추가할 부분 -->
-<th:block th:replace="~{Include/login_form}"></th:block>
+	<th:block th:replace="~{Include/login_form}"></th:block>
 	</td>
 
 	<td width="80%" valign="top">	
 		<br>
     <table border="0" cellspacing="1" width="100%" align="center">
       <tr>
-        <td colspan="7" align="center" valign="center" height="20">
+        <td colspan="5" align="center" valign="center" height="20">
         <font size="4" face="돋움" color="blue">
         <img src="/Images/img/bullet-01.gif"> <b>공 지 사 항</b></font></td></tr>
       <tr>
         <td colspan="5" align="right" valign="middle" height="20">
-		<font size="2" face="고딕">전체 : <b>15</b>건 - 1/ 2 Pages</font></td></tr>
+		<font size="2" face="고딕">전체 : <b th:text="${totcount}"></b>건</font></td></tr>
  	   <tr bgcolor="e3e9ff">
  	      <td width="10%" align="center" height="20"><font face="돋움" size="2">번 호</font></td>
  	      <td width="50%" align="center" height="20"><font face="돋움" size="2">제 목</font></td>
@@ -44,50 +42,72 @@
  	      <td width="10%" align="center" height="20"><font face="돋움" size="2">조회수</font></td>
  	   </tr>
 
-	   <tr onMouseOver="style.backgroundColor='#D1EEEE'" onMouseOut="style.backgroundColor=''">
-          <td align="center" height="25">
-             <font face="돋움" size="2" color="#000000">5</font></td>
-		  <td align="left" height="20">&nbsp;
-			 <font face="돋움" size="2" color="#000000"><a class="list" href="">제목부분입니다</a></td>
-		  <td align="center" height="20"><font face="돋움" size="2">	<a class="list" >관리자</font></td>
-		  <td align="center" height="20"><font face="돋움" size="2">2007-10-22</font></td>
-		  <td align="center" height="20"><font face="돋움" size="2">3</font></td>
+	   <tr th:each="notice : ${nList}" onMouseOver="style.backgroundColor='#D1EEEE'" onMouseOut="style.backgroundColor=''">
+			<td align="center" height="25">
+			<font face="돋움" size="2" color="#000000" th:text="${notice.idx}"></font></td>
+			<td align="left" height="20">&nbsp;
+				<font face="돋움" size="2" color="#000000">
+				<a class="list" th:href="@{/Notice/notice_view(idx=${notice.idx},page=${nList.number+1})}" th:text="${notice.subject}"></a>
+				</font>
+			</td>
+			<!-- ⭐ notice.name -> notice.adid 로 수정 -->
+			<td align="center" height="20">
+				<font face="돋움" size="2" th:text="${notice.adid}"></font>
+			</td>
+			<td align="center" height="20">
+				<font face="돋움" size="2" th:text="${notice.regdate != null ? #temporals.format(notice.regdate, 'yyyy-MM-dd') : ''}"></font>
+			</td>
+			<td align="center" height="20">
+				<font face="돋움" size="2" th:text="${notice.readcnt}"></font>
+			</td>
 		</tr>
 	</table>
-	 <div align="center">
+
+	<!-- 페이징 영역 테이블 내부로 정리 -->
+	<div align="center">
         <table width="700" border="0" cellspacing="0" cellpadding="5">
-          <tr>&nbsp;</tr><tr>
+          <tr>
              <td colspan="5">        
-                <div align="center">[1][2][3]</div>
+                <div align="center">
+                	<a th:if="${nList.hasPrevious()}" th:href="@{/Notice/notice_list(page=${nList.number-1}, search=${search}, key=${key})}">이전</a>
+<span>
+    [[${nList.number+1}]] / [[${nList.totalPages == 0 ? 1 : nList.totalPages}]]
+</span>
+<a th:if="${nList.hasNext()}" th:href="@{/Notice/notice_list(page=${nList.number+1}, search=${search}, key=${key})}">다음</a>
+                </div>
 			  </td>
 			 </tr>
 		</table>
+	</div>
 
 	<table width="600">
 		<tr>
 			<td width="25%"> &nbsp;</td>
 			<td width="50%" align="center">
 				<table>
-					<form>	
-					<!-- 검색어를 이용하여 글제목, 작성자, 글내용 중에 하나를 입력 받아 처리하기 위한 부분 -->
+					<form name="notice" method="get" action="/Notice/notice_list">	
 						<tr>
 							<td>
 								<select name="search">
-									<option value="">글제목</option>
-									<option value="">글내용</option>
-								</select>
-							</td>
-							<td> <input type="text" size=20 name=""></td>
-							<td> <a href="#"><img src="/Images/img/search2.gif" border="0"></a></td>
+                                <option value="subject" th:selected="${search == 'subject'}">글제목</option>
+                                <option value="adid" th:selected="${search == 'adid'}">작성자</option>
+                                <option value="contents" th:selected="${search == 'contents'}">글내용</option>
+                            </select>
+                        </td>
+                        <td> <input type="text" size=20 name="key" th:value="${key}" ></td>
+                        <td> <a href="javascript:notice_search()"><img src="/Images/img/search2.gif" border="0"></a>
+                        </td>
 						</tr>
 					</form>
 				</table>
 			</td>
 			<td width="25%" align="right">
-			<a href="/Notice/notice_write"><img src="/Images/img/write.gif" border="0"></a>
+			<a th:href="@{notice_write}"><img src="/Images/img/write.gif" border="0"></a>
 			</td>
 		</tr>
 	</table>
+  </td>
+ </tr>
+</table>
 </body>
 </html>
-
