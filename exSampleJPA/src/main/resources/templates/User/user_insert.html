@@ -1,4 +1,4 @@
-<!-- topmenu include -->
+<!-- 메뉴 include -->
 <th:block th:replace="~{Include/topmenu}"></th:block>
 <html>
 <head>
@@ -8,6 +8,9 @@
      td.title { padding:4px; background-color:#e3e9ff }
      td.content { padding:10px; line-height:1.6em; text-align:justify; }
      a.list { text-decoration:none;color:black;font-size:10pt; }
+     th, td {
+  		padding: 5px 5px; /* 위아래 12px, 좌우 10px */
+	 }
    </style>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
@@ -18,6 +21,7 @@ $(function(){
 	$("#emailcheck").hide();
 	$("#emailshow").hide(); // 숨기기
 
+	
 	//라디오 버튼 선택시
 	$("input[name='mode']").change(function() {
         if ($("#mode1").is(":checked")) {
@@ -33,22 +37,77 @@ $(function(){
         }
     });
 	
-	// 등록 버튼 클릭시
+	//id 중복검사(Ajax))
+	$("#userid").on("input", function(){
+    var userid = $("#userid").val();
+    
+    if(userid.trim() === '') {
+        $("#userID_c").text("[ 5~16자 이내의 영문이나 숫자만 가능합니다. ]");
+        return;
+    }
+    
+    $.ajax({
+        url: "/User/user_idCheck",
+        type: "post",
+        data: {"userid": userid},
+        success: function(result){
+            // 서버에서 넘어오는 문자열 "true" / "false" 확인
+            if(result === 'false'){
+                $("#userID_c").text("사용 가능한 아이디입니다").css("color", "green");
+            } else {
+                $("#userID_c").text("이미 사용중인 아이디입니다").css("color", "red");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log("AJAX 에러 발생: ", error);
+        }
+    });
+});
+
+	//비밀번호 확인
+	$("#repasswd").change(function(){
+		if($("#passwd").val() == $("#repasswd").val()){
+			repasswd_c.innerHTML="확인 되었습니다."
+		}else{
+			repasswd_c.innerHTML="비밀번호를 다시 입력하세요"
+				$("#repasswd").val('');
+				$("#repasswd").focus();
+		}
+	});
 	
-
-
-	//핸드폰 인증하기 버튼 클릭시
+	//SMS 보인 인증(인증번호 발송)
 	$("#phoneBtn1").click(function(){
+		//전화번호유효성 검사
+		if($("#tel").val()==''){
+			alert("전화번호를 입력하세요");
+			$("#tel").focus();
+			return;
+		}
+		var tel = $("#tel").val();
+		$.ajax({
+			url:"/User/user_sms",
+			type:"post",
+			data:{"tel":tel},
+			success:function(result){
+				phone_c.innerHTML="인증번호가 전송되었습니다";
+				$("#usersms").val(result);
+			}
+		});
 		$("#smscheck").show();
-
 	});
-
-	//이메일 인증하기 버튼 클릭시
-	$("#emailBtn1").click(function(){
-		$("#emailcheck").show();
-
+	
+	//SMS 보인 인증(인증번호 확인)
+	$("#phoneBtn3").click(function(){
+		if($("#usersms").val() == $("#resms").val()){
+			resms_c.innerHTML="인증되었습니다";
+			$("#resms").prop("readonly", true);//읽기전용으로 변경
+		}else{
+			resms_c.innerHTML="인증번호가 일치하지 않습니다. 다시입력하세요";
+			$("#resms").val('');
+			$("#resms").focus();
+		}
 	});
-
+	
 	//이메일 체크(직접입력 또는 선택)
 	$("#email3").on("change",function(){
 		if($("#email3").prop("selectedIndex") !=0 ){
@@ -59,20 +118,65 @@ $(function(){
 			$('#email2').val('');
 		}
 	});
+	
+	//email 본인인증
+	$("#emailBtn1").click(function(){
+		//이메일 유효성 검사 검사
+		if($("#email1").val()=='' || $("#email2").val()==''){
+			alert("이메일이 올바르지 않습니다");
+			$("#email1").focus();
+			return;
+		}
+		
+		var email = $("#email1").val() + "@" + $("#email2").val();
+		$("#email").val(email);//form 태그의 email에 값 설정
+		
+		$.ajax({
+			url:"/User/user_email",
+			type:"post",
+			data:{"email":email},
+			success:function(result){
+				email_c.innerHTML="인증번호가 전송되었습니다";
+				$("#useremail").val(result);
+			}
+		});
+		$("#emailcheck").show();
+	});
+	
+	//email 보인 인증(인증번호 확인)
+	$("#emailBtn3").click(function(){
+		if($("#useremail").val() == $("#reemail").val()){
+			reemail_c.innerHTML="인증되었습니다";
+			$("#reemail").prop("readonly", true);//읽기전용으로 변경
+		}else{
+			reemail_c.innerHTML="인증번호가 일치하지 않습니다. 다시입력하세요";
+			$("#reemail").val('');
+			$("#reemail").focus();
+		}
+	});
+	
 
+	// 유효성 검사후 등록하기
+	//유효성 검사
+	$("#userSend").click(function(){
+		
+		
+		$("#user").submit();
+	});
 
+	//가입취소
+	$("#userCancle").click(function(){
+		history.back();
+	});
+	
 }); //$(function()끝
-
-
 	
 </script>
 </head>
 
 <body bgcolor="#FFFFFF" LEFTMARGIN=0  TOPMARGIN=0 >
  
-
-
-<table border="0" width="800">
+ <table border="0" width="800">
 <tr>
   <td width="20%"  bgcolor="#ecf1ef" valign="top" style="padding-left:0;">
 	
@@ -80,7 +184,11 @@ $(function(){
 	<th:block th:replace="~{Include/login_form}"></th:block>
   </td>
   <td width="80%" valign="top">&nbsp;<img src="/Images/img/title1.gif" ><br>    
-	<form name="user" method=post action="user_insert">
+	<form name="user" id="user" method=post action="/User/user_insert" th:object="${userRequestDTO}">
+	<input type="hidden" id="usersms" name="usersms"><!-- 전송된 인증번호 보관용 -->
+	<input type="hidden" id="useremail" name="useremail"><!-- 전송된 이메일 인증번호 보관용  -->
+	<input type="hidden" id="email" name="email"><!-- @로 결합된 이메일 전송용  -->
+	
 	<table border=0 cellpadding=0 cellspacing=0 width=730 valign=top>
 		<tr><td align=center><br>                            
 			<table cellpadding=0 cellspacing=0 border=0 width=650 align=center>       
@@ -97,7 +205,8 @@ $(function(){
 							<tr>
 								<td width=110 bgcolor=#EFF4F8>&nbsp;회원 성명<font color=red>&nbsp;*</font></td>
 								<TD BGCOLOR=WHITE>
-									<input type=text id=name name=name size=16 maxlength=20 value="" placeholder="성명은 빈칸없이 입력하세요.">
+									<input type=text id=name name=name th:field="*{name}" size=16 maxlength=20 value="" placeholder="성명은 빈칸없이 입력하세요.">
+									<font color=red th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></font>
 								</td>
 							</tr>
 							<tr>
@@ -130,8 +239,8 @@ $(function(){
 							</tr>
 							<tr>
 								<TD BGCOLOR="#EFF4F8">&nbsp;인증 방법 선택<font color=red>&nbsp;*</font></td>
-								<TD BGCOLOR=WHITE><input type=radio id="mode1" name=mode value="핸드폰" checked>핸드폰
-									<input type=radio id="mode2" name="mode" value="이메일" >이메일
+								<TD BGCOLOR=WHITE><input type=radio id="mode1" name=mode value="1" checked>핸드폰
+									<input type=radio id="mode2" name="mode" value="2" >이메일
 								</td>
 							</tr>
 							<tr id="phone">
@@ -146,7 +255,6 @@ $(function(){
 								<TD BGCOLOR="#EFF4F8">&nbsp;인증번호<font color=red>&nbsp;*</font></td>
 								<TD BGCOLOR=WHITE>
 									<input type=text id=resms name="resms" size=13 maxlength=13 placeholder="인증번호를 입력하세요">
-									<input type="button" id="phoneBtn2" value="재발송">
                     				<font id="resms_r" size="2" color="red">&nbsp;</font>
                     				<input type="button" value="인증" id="phoneBtn3">
                     				<font id="resms_c" size="2" color="red">&nbsp;</font>
@@ -157,9 +265,9 @@ $(function(){
                 					<font color=red>&nbsp;</font>
 								</td>
 								<td bgcolor=WHITE valign=middle>
-									<input type="text" name="email1" id="email1" size=13 maxlength="15">
-									@ <input type="text" name="email2" id="email2" size=13 maxlength="15">
-									<select name="email3" id="email3" >
+									<input type="text" name="email1" id="email1" size=10 maxlength="15">
+									@ <input type="text" name="email2" id="email2" size=10 maxlength="15">
+									<select name="email3" id="email3">
 		      							<option value="0">직접입력</option>
 		      							<option value="naver.com">naver.com</option>
 		      							<option value="daum.net">daum.net</option>
@@ -174,7 +282,6 @@ $(function(){
 								<TD BGCOLOR="#EFF4F8">&nbsp;이메일 인증번호<font color=red>&nbsp;*</font></td>
 								<TD BGCOLOR=WHITE>
 									<input type=text id=reemail name="reemail" size=13 maxlength=13 placeholder="이메일 인증번호를 입력하세요">
-									<input type="button" id="emailBtn2" value="재발송">
                     				<font id="reemail_r" size="2" color="red">&nbsp;</font>
                     				<input type="button" value="인증" id="emailBtn3">
                     				<font id="reemail_c" size="2" color="red">&nbsp;</font>
@@ -193,8 +300,8 @@ $(function(){
 							</tr>
 							<tr bgcolor=#ffffff>
 								<td colspan=3 align=center>
-									<img src="/Images/img/u_bt06.gif" vspace=3 border=0 name=img3>
-									<img src="/Images/img/u_bt05.gif" border=0 hspace=10 vspace=3 name=img4>
+									<img src="/Images/img/u_bt06.gif" vspace=3 border=0 name=img3 id="userSend">
+									<img src="/Images/img/u_bt05.gif" border=0 hspace=10 vspace=3 name=img4 id="userCancle">
 								</td>
 							</tr>
 						</table> 

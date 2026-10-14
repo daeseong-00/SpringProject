@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>오류 발생</title>
+</head>
+<script th:inline="javascript">
+	const errorMessage = [[${errorMessage}]];
+	
+	if(errorMessage){
+		alert("서비스 처리 중 오류가 발생했습니다. \n\n 오류내용 : " + errorMessage);
+	}
+	history.back();
+
+</script>
+<body>
+
+</body>
+</html>
